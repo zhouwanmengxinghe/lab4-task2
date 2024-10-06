@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profiles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .user-profile {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Profiles</h1>
+    <div id="userProfilesContainer"></div>
+
+    <script>
+        fetch('userProfiles.json')
+            .then(response => {
+                if (!response.ok)
+                    throw new Error('Fetch error: ' + response.status);
+                else
+                    return response.json();
+            })
+            .then(json => {
+                const container = document.getElementById('userProfilesContainer');
+                json.userProfiles.forEach(userProfile => {
+                    const userProfileElement = document.createElement('div');
+                    userProfileElement.className = 'user-profile';
+                    userProfileElement.innerHTML = `
+                        <div><span class="label">First Name:</span> ${userProfile.firstName}</div>
+                        <div><span class="label">Last Name:</span> ${userProfile.lastName}</div>
+                        <div><span class="label">Email:</span> ${userProfile.email}</div>
+                        <div><span class="label">Date of Birth:</span> ${userProfile.dateOfBirth}</div>
+                        <div><span class="label">Address:</span> ${JSON.stringify(userProfile.address)}</div>
+                        <div><span class="label">Preferences:</span> ${JSON.stringify(userProfile.preferences)}</div>
+                    `;
+                    container.appendChild(userProfileElement);
+                });
+            })
+            .catch(err => console.error('Fetch error:', err.message));
+    </script>
+</body>
+</html>
